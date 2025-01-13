@@ -419,8 +419,13 @@ func (c *HTTPClient) sendRequestWithTLSClientConfig(
 		var payload []byte
 
 		if contentType == nil {
-			_contentType := "text/plain"
-			contentType = &_contentType
+			if _, ok := headers["Content-Type"]; ok {
+				_contentType := headers["Content-Type"][0]
+				contentType = &_contentType
+			} else {
+				_contentType := "text/plain"
+				contentType = &_contentType
+			}
 		}
 
 		if raw, ok := params.([]byte); ok {
